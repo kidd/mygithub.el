@@ -1,0 +1,16 @@
+* Name
+  Mygithub
+
+* Usage
+  - Fill the variable `mygithub-projects' with your projects in github
+  you want to search.
+  - use m-x mygithub and choose an action and a repo
+  - use mygithub with an argument (c-u m-x mygithub) to create new
+    pull requests or issues
+
+* Author
+  Raimon Grau Cuscó <raimonster@gmail.com>
+
+* License
+
+  GNU GPL3
