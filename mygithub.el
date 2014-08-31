@@ -28,10 +28,22 @@
   '("kidd/mygithub.el"))
 
 (defvar mygithub-github-url "https://www.github.com/")
+(defvar mygithub-jenkins-url "")
 
 
-(defvar mygithub-actions '(("pulls" "/pulls") ("issues" "/issues") ("code" "")))
+(defvar mygithub-actions '(
+                           ("pulls" "/pulls")
+                           ("issues" "/issues")
+                           ("code" "")))
 
+(defun mygithub-get-current-remote ()
+  (magit-get "remote.origin.url"))
+
+(defun mygithub-get-current-project ()
+  (let ((url (mygithub-get-current-remote)))
+    (string-match "github.com:\\(.*\\).git$" url)
+    (message url)
+    (match-string 1 url)))
 
 (defun mygithub (&optional arg)
   "lets you go to the code, issues or pulls for your
@@ -46,6 +58,19 @@ projects. With argument it creates an issue or a pull request"
                           ((string= what"/issues") "/new")
                           ((string= what "/pulls") "/new")
                           (t ""))))))
+
+
+(defun mygithub-jenkins-build (&optional branch)
+  (interactive)
+  (let ((project (mygithub-get-current-project))
+        (branch (replace-regexp-in-string
+                 "origin/" ""
+                 (magit-get-remote/branch (or branch (magit-get-current-branch))))))
+    (browse-url (concat mygithub-jenkins-url
+                        "job/system-multijob/"
+                        "parambuild/?"
+                        "JobBranch="
+                        branch))))
 
 (provide 'mygithub)
 ;;; mygithub.el ends here
